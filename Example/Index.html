@@ -17,12 +17,16 @@
 <body> 
 
     <script language="javascript" type="text/javascript">
+        var quirk = null;
         document.addEventListener('DOMContentLoaded', function() {
-        var quirk = new Quirk("drawingCanvas");
-        quirk.width = 897;
-        quirk.height = 532;
-        quirk.color = "#cc4499";
-        quirk.init();
+          if (typeof Quirk === "undefined"){
+            return;
+          }
+            quirk = new Quirk("drawingCanvas");
+            quirk.width = 897;
+            quirk.height = 532;
+            quirk.color = "#cc4499";
+            quirk.init();
     }, false);  
     </script>
    
