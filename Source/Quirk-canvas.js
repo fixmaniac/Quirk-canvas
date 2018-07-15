@@ -1,4 +1,14 @@
-var quirk;
+/**
+ * Copyright (c) 2018-present, Łukasz Ligocki.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ *
+ * @flow
+ */
+
+"use strict";
+var Quirk;
 var ShapeType = {
   EMPTY: 0,
   CHALK: 1,
@@ -61,6 +71,10 @@ Quirk = function(id){
 }
 Quirk.prototype = {
 
+/**
+ * Initialize new instance of object, DOM, event etc.
+ * @public
+ */
 
 init : function(){
        /// UI elements
@@ -104,14 +118,19 @@ init : function(){
        }
 
 
-       quirk = this;
+       //quirk = this;
        this.state = StateType.draw;
        this.shape = this.setShape(ShapeType.CHALK);
        Object.defineProperty(this, 'isEditable', { get: function() 
            { return (this.state == 'undefined' || this.state != StateType.draw) ? false : true; } });
        
 },
-
+/**
+ * Change a tool.
+ *
+ * @param {ShapeType} kind of tool.
+ * @public
+ */
 setShape: function(type){
 
     if (!this.isEditable){
@@ -148,17 +167,18 @@ setEraser: function(){
 move : function(args){
     
     if (args.layerX || args.layerX == 0) {
-        x = args.layerX;
-        y = args.layerY;
+       var x = args.layerX;
+       var y = args.layerY;
     }
     else if (args.offsetX || args.offsetX == 0) {
-        x = args.offsetX;
-        y = args.offsetY;
+      var  x = args.offsetX;
+      var  y = args.offsetY;
     }
 
    windowX = args.pageX;
    windowY = args.pageY;
    statusbar.innerHTML = "<center><p style='color:blue; font-weight: bold;'>x: " + windowX + ", y: " + windowY + "</p></center>";
+
     if (shape == null){
         return;
     }
@@ -187,6 +207,7 @@ move : function(args){
 },
 
 /**
+ * Inject html straight into a canvas.
  *
  * @param html html text value
  */
@@ -207,7 +228,7 @@ insertHTML : function(html){
                 '</svg>';
 
     var data = data_on;
-    for (i = 0; i < data_arg.length; i++){
+    for (var i = 0; i < data_arg.length; i++){
         data += data_arg[i];
     }
     data += data_off;
@@ -241,6 +262,12 @@ insertHTML : function(html){
       obj.style.height = height;
   },
 
+/**
+ * Invoke a tint WYSIWYG editor to attach a text.
+ *
+ * @public
+ */
+
   insertText : function(){
       var editor = document.getElementById('editor');
       var toolbar = document.getElementById('editorbar');
@@ -250,10 +277,10 @@ insertHTML : function(html){
    
       var editor  = document.createElement("iframe");
       editor.id = "editor";
-      quirk.setSize(editor, windowX, windowY, '50px');
+      Quirk.prototype.setSize(editor, windowX, windowY, '50px');
       var toolbar = document.createElement("div"); 
       toolbar.id = "editorbar";
-      quirk.setSize(toolbar, windowX, windowY - 25 , '25px');
+      Quirk.prototype.setSize(toolbar, windowX, windowY - 25 , '25px');
       toolbar.innerHTML = "<table><tr><td><button class='fa fa-bold' aria-hidden='true' data-command='bold' onClick=\"javascript:quirk.execCommand('bold');\">" +
                                 "</button></td>" +
                           "<td><button class='fa fa-italic' aria-hidden='true' data-command='italic' onClick=\"javascript:quirk.execCommand('italic');\">"+ 
@@ -282,11 +309,11 @@ insertHTML : function(html){
       }
       
        if (editor.addEventListener){
-           editor.contentWindow.addEventListener("paste", quirk.onPaste, false);
+           editor.contentWindow.addEventListener("paste", Quirk.onPaste, false);
       }
   }
   else if (editor != null){
-      quirk.insertHTML(editor.contentWindow.document.body.innerHTML);
+      Quirk.prototype.insertHTML(editor.contentWindow.document.body.innerHTML);
       editor.parentNode.removeChild(editor);
       toolbar.parentNode.removeChild(toolbar);
   }
@@ -420,3 +447,4 @@ Quirk.shapes.rectangle.prototype.mouseup = function(x,y){
 };
 
 })();
+
